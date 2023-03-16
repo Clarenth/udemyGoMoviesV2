@@ -8,6 +8,7 @@ import App from './App';
 import ErrorPage from './components/ErrorPage/ErrorPage';
 import Home from './components/Home/Home'
 import Movies from './components/Movies/Movies';
+import Movie from './components/Movies/Movie/Movie';
 import Genres from './components/Genres/Genres';
 import Login from './components/Login/Login';
 import ManageCatalogue from './components/Admin/ManageCatalogue';
@@ -30,6 +31,10 @@ const siteRouter = createBrowserRouter([
       {
         path: "/movies",
         element: <Movies />,
+      },
+      {
+        path: "/movies/:id",
+        element: <Movie />,
       },
       {
         path: "/genres",

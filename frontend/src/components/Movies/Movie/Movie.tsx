@@ -1,14 +1,16 @@
 // Libraries
-import React from 'react';
+import React, { useState } from 'react';
 
 // Components
 
 // Styles
 
 const Movie = () => {
+  const [movie, setMovie] = useState<Object>({})
+
   return (
     <div>
-      <div>Movie</div>
+      <h2>Movie</h2>
       <hr />
     </div>
   )
