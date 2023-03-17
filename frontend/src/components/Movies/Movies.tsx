@@ -7,12 +7,12 @@ import { Link } from 'react-router-dom';
 // Styles
 
 const Movies = () => {
-  const [movies, setMovies] = useState<Array<Object>>([])
+  const [movies, setMovies] = useState<Array<object>>([])
 
   useEffect
   (() => 
     {
-      let moviesList: Array<Object> = 
+      let moviesList: Array<object> = 
       [
         {
           id: 1,

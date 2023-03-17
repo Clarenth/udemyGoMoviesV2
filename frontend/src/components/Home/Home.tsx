@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   return (
     <React.Fragment>
-      <h5>Hello from Home component</h5>
       <h1>Welcome to MovieFiles</h1>
       <hr />
       <Link to="/movies">
