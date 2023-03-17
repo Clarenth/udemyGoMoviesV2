@@ -1,4 +1,9 @@
+// Libraries
 import React, { forwardRef } from 'react'
+
+// Components
+
+// Styles
 
 const Input = forwardRef((props: any, ref: any) => {
 
@@ -17,9 +22,10 @@ const Input = forwardRef((props: any, ref: any) => {
           autoComplete={props.autoComplete}
           value={props.value}
         />
+        <div className={props.errorDIv}>{ props.errorMsg }</div>
       </div>
     </React.Fragment>
   )
 })
 
-export default Input
+export default Input;

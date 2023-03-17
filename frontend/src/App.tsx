@@ -7,7 +7,11 @@ import { Link, Outlet, } from 'react-router-dom'
 // Styles
 
 function App() {
-  const [jwtToken, setJWTToken] = useState<string>("")
+  interface jwtTokenType {
+    setJWTToken: string
+  }
+
+  const [jwtToken, setJWTToken] = useState<jwtTokenType | string | null>("")
 
   return (
     <div className="container">
@@ -42,7 +46,7 @@ function App() {
           </nav>
         </div>
         <div className="col-md-10">
-          <Outlet />
+          <Outlet context={{ jwtToken, setJWTToken }}/>
         </div>
       </div>
     </div>
