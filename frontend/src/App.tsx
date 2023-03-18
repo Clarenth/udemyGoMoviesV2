@@ -3,15 +3,14 @@ import React, { useState } from 'react';
 import { Link, Outlet, } from 'react-router-dom'
 
 // Components
+import Alert from "./components/Alert/Alert"
 
 // Styles
 
 function App() {
-  interface jwtTokenType {
-    setJWTToken: string
-  }
-
-  const [jwtToken, setJWTToken] = useState<jwtTokenType | string | null>("")
+  const [jwtToken, setJWTToken] = useState<string | null>("");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertClassName, setAlertClassName] = useState<string>("d-none");
 
   return (
     <div className="container">
@@ -46,7 +45,8 @@ function App() {
           </nav>
         </div>
         <div className="col-md-10">
-          <Outlet context={{ jwtToken, setJWTToken }}/>
+          <Alert message={alertMessage} className={alertClassName} />
+          <Outlet context={{ jwtToken, setJWTToken, setAlertClassName, setAlertMessage }}/>
         </div>
       </div>
     </div>

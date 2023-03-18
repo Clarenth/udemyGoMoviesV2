@@ -1,6 +1,6 @@
 // Libraries
 import React, { useState } from 'react'
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 // Components
 import Input from '../form/Input';
@@ -13,12 +13,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   
   const { setJWTToken } = useOutletContext<any>();
+  const { setAlertMessage } = useOutletContext<any>();
+  const { setAlertClassName } = useOutletContext<any>();
+
+  const navigate = useNavigate();
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log("email/pass", email, password)
     if(email === "crag@tarr.gov") {
       setJWTToken("abc");
+      setAlertClassName("d-none")
+      setAlertMessage("");
+      navigate("/")
+    } else {
+      setAlertClassName("alert-danger")
+      setAlertMessage("Invalid credentials")
     }
   }
 
