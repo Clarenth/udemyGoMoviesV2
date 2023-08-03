@@ -32,8 +32,7 @@ const Movies = () => {
         },
       ];
       setMovies(moviesList)
-    },
-  []
+    },[]
   );
   
   return (
