@@ -12,26 +12,21 @@ const Movies = () => {
   useEffect
   (() => 
     {
-      let moviesList: Array<object> = 
-      [
-        {
-          id: 1,
-          title: "Goldfinger",
-          release_date: "1964-09-20",
-          runtime: 110,
-          mpaa_rating: "13+",
-          description: "James Bond must defeat Goldfinger."
-        },
-        {
-          id: 2,
-          title: "Raiders of the Lost Ark",
-          release_date: "1981-06-12",
-          runtime: 115,
-          mpaa_rating: "PG-13",
-          description: "Indiana Jones must defeat Nazis."
-        },
-      ];
-      setMovies(moviesList)
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+
+      const requestOptions =
+      {
+        method: "GET",
+        headers: headers,
+      }
+
+      fetch(`http://localhost:8080/movies`, requestOptions)
+        .then((response) => response.json())
+        .then((data) => {
+          setMovies(data);
+        })
+        .catch(err => { console.log(err) });
     },[]
   );
   
