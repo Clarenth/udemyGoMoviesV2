@@ -30,6 +30,7 @@ func main() {
 		log.Fatal(err)
 	}
 	app.DB = conn
+	defer app.DB.Close()
 
 	app.Domain = "example.com"
 
