@@ -14,10 +14,12 @@ type PostgresDBRepo struct {
 
 const dbTimeout = time.Second * 3
 
+// Connection returns a pointer of type "sql.DB" struct for establishing a Database connection
 func (m *PostgresDBRepo) Connection() *sql.DB {
 	return m.DB
 }
 
+// AllMovies queries the Postgres Database and returns all rows from the movies table.
 func (m *PostgresDBRepo) AllMovies() ([]*models.Movie, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()

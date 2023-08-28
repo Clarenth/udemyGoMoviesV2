@@ -4,8 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	// _ "github.com/jackc/pgconn"
-	// _ "github.com/jackc/pgx/stdlib"
+	_ "github.com/jackc/pgx/v5"
 	_ "github.com/jackc/pgx/v5/pgconn"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
