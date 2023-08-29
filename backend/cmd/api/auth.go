@@ -8,14 +8,14 @@ import (
 )
 
 type Auth struct {
-	Issuer        string
-	Audience      string
-	Secret        string
-	TokenExpiry   time.Duration
-	RefreshExpiry time.Duration
-	CookieDomain  string
-	CookiePath    string
-	CookieName    string
+	Issuer            string
+	Audience          string
+	Secret            string
+	TokenExpiryTime   time.Duration
+	RefreshExpiryTime time.Duration
+	CookieDomain      string
+	CookiePath        string
+	CookieName        string
 }
 
 type jwtUser struct {
@@ -48,7 +48,7 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 	claims["typ"] = "JWT"
 
 	// Set the expiry for the JWT
-	claims["exp"] = time.Now().UTC().Add(j.TokenExpiry).Unix()
+	claims["exp"] = time.Now().UTC().Add(j.TokenExpiryTime).Unix()
 
 	// Create the signed token
 	signedAccessToken, err := token.SignedString([]byte(j.Secret))
@@ -58,12 +58,24 @@ func (j *Auth) GenerateTokenPair(user *jwtUser) (TokenPairs, error) {
 
 	// Create the refresh token and the claims
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	refreshTokenClaims := refreshToken.Claims.(jwt.MapClaims)
+	refreshTokenClaims["sub"] = fmt.Sprint(user.ID)
 
 	// Set the expiery of the refresh token
+	refreshTokenClaims["iat"] = time.Now().UTC().Add(j.RefreshExpiryTime).Unix()
 
 	// Create the signed refresh token
+	signedRefreshToken, err := token.SignedString([]byte(j.Secret))
+	if err != nil {
+		return TokenPairs{}, err
+	}
 
 	// Create the token pairs and populate with signed tokens
+	var tokenPairs = TokenPairs{
+		Token:        signedAccessToken,
+		RefreshToken: signedRefreshToken,
+	}
 
 	// Return the token pairs
+	return tokenPairs, nil
 }
