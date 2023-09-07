@@ -3,6 +3,7 @@ package main
 import (
 	"backend/internal/repository"
 	"backend/internal/repository/dbrepo"
+	"time"
 
 	"flag"
 	"fmt"
@@ -13,9 +14,14 @@ import (
 const port = 8080
 
 type application struct {
-	DSN    string
-	Domain string
-	DB     repository.DatabaseRepo
+	DSN          string
+	Domain       string
+	DB           repository.DatabaseRepo
+	auth         Auth
+	JWTSecret    string
+	JWTIssuer    string
+	JWTAudience  string
+	CookieDomain string
 }
 
 func main() {
@@ -24,6 +30,11 @@ func main() {
 
 	// read from command line
 	flag.StringVar(&app.DSN, "dsn", "host=localhost port=5433 user=postgres password=postgres dbname=movies sslmode=disable timezone=UTC connect_timeout=5", "Postgres connection string")
+	flag.StringVar(&app.JWTSecret, "jwt-secret", "deepstonecrypt", "Signing Secret")
+	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "example.com", "Signing Issuer")
+	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "Signing Audience")
+	flag.StringVar(&app.JWTSecret, "jwt-secret", "deepstonecrypt", "Signing Secret")
+	flag.StringVar(&app.Domain, "domain", "example.com", "Domain")
 	flag.Parse()
 
 	// connect to the database
@@ -34,7 +45,18 @@ func main() {
 	app.DB = &dbrepo.PostgresDBRepo{DB: conn}
 	defer app.DB.Connection().Close()
 
-	app.Domain = "example.com"
+	app.auth = Auth{
+		Issuer:            app.JWTIssuer,
+		Audience:          app.JWTAudience,
+		Secret:            app.JWTSecret,
+		TokenExpiryTime:   time.Minute * 15,
+		RefreshExpiryTime: time.Hour * 24,
+		CookiePath:        "/",
+		CookieName:        "__Host-refresh_token", // use double underscore (ex: __ ) for older browser compatability, and, according to Trevor Sawler, more secure
+		CookieDomain:      app.Domain,
+	}
+
+	//app.Domain = "example.com" // dlete later
 
 	log.Println("Starting application on port", port)
 
