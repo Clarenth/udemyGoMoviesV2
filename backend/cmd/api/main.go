@@ -33,7 +33,7 @@ func main() {
 	flag.StringVar(&app.JWTSecret, "jwt-secret", "deepstonecrypt", "Signing Secret")
 	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "example.com", "Signing Issuer")
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "Signing Audience")
-	flag.StringVar(&app.JWTSecret, "jwt-secret", "deepstonecrypt", "Signing Secret")
+	flag.StringVar(&app.CookieDomain, "jwt-cookie-domain", "localhost", "cookie domain")
 	flag.StringVar(&app.Domain, "domain", "example.com", "Domain")
 	flag.Parse()
 
