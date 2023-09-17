@@ -34,7 +34,8 @@ func main() {
 	flag.StringVar(&app.JWTIssuer, "jwt-issuer", "example.com", "Signing Issuer")
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "Signing Audience")
 	flag.StringVar(&app.CookieDomain, "jwt-cookie-domain", "localhost", "cookie domain")
-	flag.StringVar(&app.Domain, "domain", "example.com", "Domain")
+	flag.StringVar(&app.Domain, "domain", "localhost", "Domain")
+	//flag.StringVar(&app.Domain, "domain", "example.com", "Domain") // leave here for invalid cookie resolving. Fix later.
 	flag.Parse()
 
 	// connect to the database
@@ -52,8 +53,9 @@ func main() {
 		TokenExpiryTime:   time.Minute * 15,
 		RefreshExpiryTime: time.Hour * 24,
 		CookiePath:        "/",
-		CookieName:        "__Host-refresh_token", // use double underscore (ex: __ ) for older browser compatability, and, according to Trevor Sawler, more secure
-		CookieDomain:      app.Domain,
+		CookieName:        "refresh-token", // use this for now due to Chromium
+		//CookieName:        "__Host-refresh-token", // use double underscore (ex: __ ) for older browser compatability, and, according to Trevor Sawler, more secure
+		CookieDomain: app.Domain,
 	}
 
 	//app.Domain = "example.com" // dlete later

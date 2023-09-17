@@ -4,6 +4,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 
 // Components
 import Input from '../form/Input';
+import { error } from 'console';
 
 // Styles
 
@@ -20,16 +21,80 @@ const Login = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log("email/pass", email, password)
-    if(email === "crag@tarr.gov") {
-      setJWTToken("abc");
-      setAlertClassName("d-none")
-      setAlertMessage("");
-      navigate("/")
-    } else {
-      setAlertClassName("alert-danger")
-      setAlertMessage("Invalid credentials")
+    // build request paylod
+    let payload = 
+    {
+      email: email,
+      password: password,
     }
+
+    const requestOptions =
+    {
+      method: "POST",
+      headers: 
+      {
+        "Content-Type": "application/json",
+        credentials: 'include',
+      },
+      //credentials: 'include',
+      body: JSON.stringify(payload)
+    }
+    fetch(`/authenticate`, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      if(data.error) {
+        setAlertClassName("alert-danger");
+        setAlertMessage(data.message);
+      } else {
+        setJWTToken(data.access_token);
+        setAlertClassName("d-none");
+        setAlertMessage("");
+        navigate("/")
+      }
+    })
+    .catch(error => {
+      setAlertClassName("alert-danger");
+      setAlertMessage(error);
+    })
+  }
+
+  const devLogin = (event: any) => {
+    event.preventDefault();
+    // build request paylod
+    let payload = 
+    {
+      email: "admin@example.com",
+      password: "secret",
+    }
+
+    const requestOptions =
+    {
+      method: "POST",
+      headers: 
+      {
+        "Content-Type": "application/json",
+        credentials: 'include',
+      },
+      //credentials: 'include',
+      body: JSON.stringify(payload)
+    }
+    fetch(`/authenticate`, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      if(data.error) {
+        setAlertClassName("alert-danger");
+        setAlertMessage(data.message);
+      } else {
+        setJWTToken(data.access_token);
+        setAlertClassName("d-none");
+        setAlertMessage("");
+        navigate("/")
+      }
+    })
+    .catch(error => {
+      setAlertClassName("alert-danger");
+      setAlertMessage(error);
+    })
   }
 
   return (
@@ -59,6 +124,13 @@ const Login = () => {
           <input 
             type="submit"
             value="Login"
+            className="btn btn-primary"
+          />
+        </form>
+        <form onSubmit={devLogin}>
+          <input 
+            type="submit"
+            value="Dev Login"
             className="btn btn-primary"
           />
         </form>
