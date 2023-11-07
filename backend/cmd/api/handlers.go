@@ -39,12 +39,14 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+	log.Print("Hello from authenticate")
 
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
 		app.errorJSON(w, err, http.StatusBadRequest)
 		return
 	}
+	log.Print(requestPayload)
 
 	// validate the user agains the database
 	user, err := app.DB.GetUserByEmail(requestPayload.Email)
@@ -77,6 +79,12 @@ func (app *application) authenticate(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, refreshCookie)
 
 	app.writeJSON(w, http.StatusAccepted, tokens)
+}
+
+func (app *application) logout(w http.ResponseWriter, r *http.Request) {
+	log.Print("Hello from logout")
+	http.SetCookie(w, app.auth.GetExpiredCookie())
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
@@ -124,4 +132,15 @@ func (app *application) refreshToken(w http.ResponseWriter, r *http.Request) {
 			app.writeJSON(w, http.StatusOK, tokenPairs)
 		}
 	}
+}
+
+func (app *application) MovieCatalogue(w http.ResponseWriter, r *http.Request) {
+	movies, err := app.DB.AllMovies()
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, movies)
+
 }
