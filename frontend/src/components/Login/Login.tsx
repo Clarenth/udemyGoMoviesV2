@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
 // Components
-import Input from '../form/Input';
+import Input from '../form/Input/Input';
 import { error } from 'console';
 
 // Styles
